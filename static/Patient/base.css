@@ -1,0 +1,133 @@
+/* Custom CSS for E-Hospital Project */
+
+:root {
+    --primary-color: #106b5a;
+    --secondary-color: #3498db;
+    --light-background: #f4f6f9;
+    --white: #ffffff;
+    --text-color: #333;
+}
+
+body {
+    background-color: var(--light-background);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: var(--primary-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 10px 0;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: var(--white) !important;
+}
+
+.navbar-brand .logo {
+    height: 40px;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+.navbar-nav .nav-link {
+    color: var(--white) !important;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .nav-link i {
+    margin-right: 8px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--secondary-color) !important;
+}
+
+/* Content Wrapper */
+.content-wrapper {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    padding: 25px;
+    margin-top: 20px;
+}
+
+/* Alert Styling */
+.alert {
+    border-radius: 5px;
+    padding: 15px;
+}
+
+/* Footer Styling */
+.footer {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 40px 0 20px;
+    margin-top: 30px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: var(--white);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--secondary-color);
+}
+
+.footer-logo {
+    max-height: 80px;
+    margin-bottom: 15px;
+}
+
+.tagline {
+    font-style: italic;
+    color: rgba(255,255,255,0.7);
+}
+
+.copyright {
+    margin-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 20px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .footer .col-md-4 {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+}
+
+/* Dropdown Styling */
+.dropdown-menu {
+    background-color: var(--white);
+    border: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-item i {
+    margin-right: 10px;
+}

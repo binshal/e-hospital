@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Prescription</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Create Prescription for {{ appointment.patient.first_name }} {{ appointment.patient.last_name }}</h2>
+
+        <!-- Prescription Form -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5>Prescription Details</h5>
+            </div>
+            <div class="card-body">
+                {% load crispy_forms_tags %}
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    
+                    <!-- Medications Field -->
+                    <!-- <div class="form-group">
+                        <label for="medications">Medications</label>
+                        {{ form|crispy }}
+                    </div> -->
+                    
+                    <!-- Instructions Field -->
+                    <!-- <div class="form-group">
+                        <label for="instructions">Instructions</label>
+                        {{ form.instructions }}
+                    </div> -->
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary btn-sm">Create Prescription</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Back to Dashboard Link -->
+        <div class="text-center mt-4">
+            <a href="{% url 'doctor_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

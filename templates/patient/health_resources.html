@@ -1,0 +1,56 @@
+{% extends 'patient/base.html' %}
+
+{% block title %}Health Education Resources{% endblock %}
+
+{% block content %}
+<div class="container health-resources">
+    <h1>Health Education Resources</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">Filter by Category</div>
+                <div class="card-body">
+                    <form action="{% url 'filter_resources_by_category' %}" method="get">
+                        <div class="form-group">
+                            <select name="category" class="form-control" onchange="this.form.submit()">
+                                <option value="">All Categories</option>
+                                {% for category in categories %}
+                                    <option value="{{ category }}" 
+                                        {% if category == selected_category %}selected{% endif %}>
+                                        {{ category }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            {% if resources %}
+                <div class="row">
+                    {% for resource in resources %}
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ resource.title }}</h5>
+                                    <p class="card-text">{{ resource.description|truncatewords:20 }}</p>
+                                    <p class="card-text"><small class="text-muted">Category: {{ resource.category }}</small></p>
+                                    <a href="{% url 'health_resource_detail' resource.id %}" class="btn btn-primary">Read More</a>
+                                    {% if resource.resource_url %}
+                                        <a href="{{ resource.resource_url }}" target="_blank" class="btn btn-secondary ml-2">External Link</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">No health resources available at the moment.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+/* Custom login page styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-image: url('Patient/slider.jpg');
+    background-size: cover;
+    background-position: center;
+}
+

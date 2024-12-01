@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Login</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS for additional styling if needed -->
+    <link rel="stylesheet" href="{% static 'Patient/Login.css' %}">
+</head>
+
+<body class="bg-cover bg-center bg-no-repeat">
+    <div class="min-h-screen flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-lg opacity-90">
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-700">Patient Login</h2>
+                <hr class="my-4 border-gray-300">
+            </div>
+            
+            <!-- Error and Message Handling -->
+            {% if form.errors %}
+                <div class="alert alert-danger text-red-600 mb-4">
+                    <strong>Error:</strong> Please correct the errors below.
+                </div>
+            {% endif %}
+            
+            {% if messages %}
+                <div>
+                    {% for message in messages %}
+                        <div class="alert {{ message.tags }} mb-4 text-sm text-center py-2 px-4 rounded bg-gray-100 text-gray-700">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- Login Form -->
+            <form method="post" action="" class="space-y-4">
+                {% csrf_token %}
+                
+                <div class="mb-4">
+                    <label for="id_username" class="block text-gray-700 font-medium">Username</label>
+                    <input type="text" name="username" id="id_username" class="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter your username" value="">
+                    {% if form.username.errors %}
+                        <div class="text-red-500 text-sm mt-1">
+                            {{ form.username.errors|first }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label for="id_password" class="block text-gray-700 font-medium">Password</label>
+                    <input type="password" name="password" id="id_password" class="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter your password">
+                    {% if form.password.errors %}
+                        <div class="text-red-500 text-sm mt-1">
+                            {{ form.password.errors|first }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                    Login
+                </button>
+            </form>
+
+            <!-- Footer link to Registration -->
+            <div class="text-center mt-4">
+                <small class="text-gray-600">Don't have an account? 
+                    <a href="{% url 'patient_register' %}" class="text-blue-600 hover:text-blue-700">Register here</a>.
+                </small>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

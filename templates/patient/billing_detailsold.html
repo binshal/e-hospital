@@ -1,0 +1,46 @@
+{% extends 'patient/base.html' %}
+
+{% block title %}Billing Details{% endblock %}
+
+{% block content %}
+<div class="container billing-details">
+    <h1>Billing Details</h1>
+    
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% else %}
+        <div class="card mb-4">
+            <div class="card-header">Billing Summary</div>
+            <div class="card-body">
+                <p><strong>Total Unpaid Amount:</strong> ${{ total_unpaid }}</p>
+            </div>
+        </div>
+
+        {% if billing_history %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Insurance Info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bill in billing_history %}
+                    <tr>
+                        <td>{{ bill.date }}</td>
+                        <td>${{ bill.amount }}</td>
+                        <td>{{ bill.status }}</td>
+                        <td>{{ bill.insurance_info|default:"No insurance info" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No billing history found.</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
+

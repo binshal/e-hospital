@@ -1,0 +1,53 @@
+{% extends 'patient/base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Your Billing Details</h2>
+    
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if billing_history %}
+        <div class="billing-summary">
+            <h3>Unpaid Bills</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bill in billing_history %}
+                    <tr>
+                        <td>{{ bill.date }}</td>
+                        <td>${{ bill.amount }}</td>
+                        <td>{{ bill.get_status_display }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <div class="total-unpaid">
+                <strong>Total Unpaid: ${{ total_unpaid }}</strong>
+            </div>
+            
+            <form method="post" action="{% url 'process_payment' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">
+                    Pay Total Amount: ${{ total_unpaid }}
+                </button>
+            </form>
+        </div>
+    {% else %}
+        <p>No outstanding bills.</p>
+    {% endif %}
+</div>
+{% endblock %}

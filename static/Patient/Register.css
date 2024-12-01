@@ -1,0 +1,15 @@
+.cont-f{
+    width: 45%;
+    margin-top: 2%;
+    border: 1px solid rgb(0, 0, 0);
+    background-color: antiquewhite;
+    
+}
+#head{
+    margin-left: 25%;
+    color: rgb(237, 122, 22);
+}
+body{
+    background-attachment: fixed;
+   background-image: url('/static/Patient/slider.jpg');
+}

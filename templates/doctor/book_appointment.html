@@ -1,0 +1,177 @@
+{% extends 'patient/base.html' %}
+
+{% block content %}
+<div class="container appointment-booking">
+    <h1>Book an Appointment</h1>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <form id="appointment-form" method="post">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="specialty" class="form-label">Select Specialty</label>
+                    <select id="specialty" class="form-control" required>
+                        <option value="">Choose Specialty</option>
+                        {% for specialty in specialties %}
+                            <option value="{{ specialty.id }}">{{ specialty.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="doctor" class="form-label">Select Doctor</label>
+                    <select id="doctor" name="doctor" class="form-control" required disabled>
+                        <option value="">Choose Doctor</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="appointment-date" class="form-label">Select Date</label>
+                    <input type="date" id="appointment-date" class="form-control" required disabled min="{{ current_date|date:'Y-m-d' }}">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="time-slot" class="form-label">Available Time Slots</label>
+                    <select id="time-slot" name="availability_slot" class="form-control" required disabled>
+                        <option value="">Select Time Slot</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="submit-btn" disabled>Book Appointment</button>
+            </form>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Booking Guidelines</div>
+                <div class="card-body">
+                    <ul>
+                        <li>Select a specialty first</li>
+                        <li>Choose a doctor</li>
+                        <li>Pick an available date</li>
+                        <li>Select from available time slots</li>
+                        <li>Confirm your appointment</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const specialtySelect = document.getElementById('specialty');
+    const doctorSelect = document.getElementById('doctor');
+    const dateInput = document.getElementById('appointment-date');
+    const timeSlotSelect = document.getElementById('time-slot');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // Set minimum date to today
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
+
+    // Populate doctors based on specialty
+    specialtySelect.addEventListener('change', function() {
+        const specialtyId = this.value;
+        
+        // Reset subsequent fields
+        doctorSelect.innerHTML = '<option value="">Choose Doctor</option>';
+        dateInput.value = '';
+        dateInput.disabled = true;
+        timeSlotSelect.innerHTML = '<option value="">Select Time Slot</option>';
+        timeSlotSelect.disabled = true;
+        submitBtn.disabled = true;
+
+        if (specialtyId) {
+            fetch(`/doctors/by-specialty/?specialty_id=${specialtyId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.doctors && data.doctors.length > 0) {
+                        data.doctors.forEach(doctor => {
+                            const option = document.createElement('option');
+                            option.value = doctor.id;
+                            option.textContent = doctor.name;
+                            doctorSelect.appendChild(option);
+                        });
+                        
+                        // Enable doctor selection
+                        doctorSelect.disabled = false;
+                    } else {
+                        const option = document.createElement('option');
+                        option.textContent = 'No doctors available';
+                        doctorSelect.appendChild(option);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    const option = document.createElement('option');
+                    option.textContent = 'Error loading doctors';
+                    doctorSelect.appendChild(option);
+                });
+        }
+    });
+
+    // Enable date input and reset subsequent fields when doctor is selected
+    doctorSelect.addEventListener('change', function() {
+        // Reset subsequent fields
+        dateInput.value = '';
+        timeSlotSelect.innerHTML = '<option value="">Select Time Slot</option>';
+        timeSlotSelect.disabled = true;
+        submitBtn.disabled = true;
+
+        // Enable date input
+        if (this.value) {
+            dateInput.disabled = false;
+        }
+    });
+
+    // Fetch available slots when date is selected
+    dateInput.addEventListener('change', function() {
+        const doctorId = doctorSelect.value;
+        const date = this.value;
+
+        // Reset time slots and submit button
+        timeSlotSelect.innerHTML = '<option value="">Select Time Slot</option>';
+        submitBtn.disabled = true;
+
+        if (doctorId && date) {
+            fetch(`/doctors/availability/?doctor_id=${doctorId}&date=${date}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.slots && data.slots.length > 0) {
+                        data.slots.forEach(slot => {
+                            const option = document.createElement('option');
+                            option.value = slot.id;
+                            option.textContent = `${slot.start_time} - ${slot.end_time}`;
+                            timeSlotSelect.appendChild(option);
+                        });
+                        
+                        // Enable time slot selection
+                        timeSlotSelect.disabled = false;
+                    } else {
+                        const option = document.createElement('option');
+                        option.textContent = 'No available slots';
+                        timeSlotSelect.appendChild(option);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching time slots:', error);
+                });
+        }
+    });
+
+    // Enable submit button when time slot is selected
+    timeSlotSelect.addEventListener('change', function() {
+        submitBtn.disabled = !this.value;
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}
